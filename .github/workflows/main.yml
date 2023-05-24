@@ -24,15 +24,31 @@ jobs:
         JF_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
     - run: |
         jf rt u "target/github-action-maven-tutorial-1.0-SNAPSHOT.jar" "jfrog/github-action-maven-tutorial/1.0-SNAPSHOT/github-action-maven-tutorial-1.0-SNAPSHOT.jar"
-    - name: Find JAR file
-      id: findjar
-      run: echo "::set-output name=jarfile::$(ls target/*.jar | head -n 1)"
 
-    - name: Copy files via ssh
-      uses: appleboy/scp-action@master
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1 
       with:
-        host: 18.222.137.144
-        username: ubuntu
-        key: ${{ secrets.SERVER_SSH_KEY }} 
-        source: "${{ steps.findjar.outputs.jarfile }}"
-        target: "/home/ubuntu"
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/javaapp:v1
+		
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+
+    - name: Deploy to Server
+      run: |
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/your-repository:v1 &&
+          docker stop java-app &&
+          docker rm java-app &&
+          docker run -d --name java-app ${{ secrets.DOCKERHUB_USERNAME }}/your-repository:v1
+        "
+
