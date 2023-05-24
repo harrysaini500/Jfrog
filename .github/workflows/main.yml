@@ -46,9 +46,9 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/your-repository:v1 &&
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/javaapp:v1 &&
           docker stop java-app &&
           docker rm java-app &&
-          docker run -d --name java-app ${{ secrets.DOCKERHUB_USERNAME }}/your-repository:v1
+          docker run -d --name java-app ${{ secrets.DOCKERHUB_USERNAME }}/javapp:v1
         "
 
