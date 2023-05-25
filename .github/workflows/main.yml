@@ -47,13 +47,17 @@ jobs:
         ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
     - name: Deploy to Server
+      run: scp setup.sh ubuntu@3.142.141.49:/home/ubuntu/
+
+    - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@3.142.141.49 
+          chmod +x setup.sh 
+          ./setup.sh
+          sleep 5
           docker ps
-          docker pull hariomsaini500/javaapp:v1 &&
-          docker run -d -p 8081:8080 --name javaapp hariomsaini500/javaapp:v1
-          docker ps
-          sleep 10
+          echo "**********************"
           curl http://localhost:8081/
-          docker ps
+          echo "**********************"
+          curl http://3.142.141.49:8081/
 
