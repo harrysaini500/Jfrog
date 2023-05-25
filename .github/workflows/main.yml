@@ -47,7 +47,7 @@ jobs:
         ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
     - name: Deploy to Server
-      run: scp setup.sh ubuntu@3.142.141.49:/home/ubuntu/
+      run: scp -o StrictHostKeyChecking=no setup.sh ubuntu@3.142.141.49:/home/ubuntu/
 
     - name: Deploy to Server
       run: |
