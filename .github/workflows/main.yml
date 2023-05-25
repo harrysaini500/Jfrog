@@ -52,5 +52,5 @@ jobs:
           docker ps
           docker pull hariomsaini500/javaapp:v1 &&
           docker run -d -p 8081:8080 --name javaapp hariomsaini500/javaapp:v1
-        "
+        
 
