@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class StartApplication {
 
     @GetMapping("/")
-    public String index(final Model model) {
-        model.addAttribute("title", "I have successfuly built a sprint boot application using Maven");
-        model.addAttribute("msg", "This application is deployed on to Docker ");
-        return "index";
+    public String helloWorld() {
+        return "Hello World";
     }
-
+    
     public static void main(String[] args) {
         SpringApplication.run(StartApplication.class, args);
     }
