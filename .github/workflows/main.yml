@@ -48,7 +48,7 @@ jobs:
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@18.222.137.144 
+        ssh -o StrictHostKeyChecking=no ubuntu@3.142.141.49 
           docker ps
           docker pull hariomsaini500/javaapp:v1 &&
           docker run -d -p 8081:8080 --name javaapp hariomsaini500/javaapp:v1
