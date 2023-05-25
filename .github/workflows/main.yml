@@ -29,35 +29,4 @@ jobs:
     - run: |
         jf rt u "target/*.jar" "jfrog/github-action-maven-tutorial/app.jar"
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1 
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/javaapp:v1
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
-
-    - name: Deploy to Server
-      run: scp -o StrictHostKeyChecking=no setup.sh ubuntu@3.142.141.49:/home/ubuntu/
-
-    - name: Deploy to Server
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@3.142.141.49 
-          chmod +x setup.sh 
-          ./setup.sh
-          sleep 5
-          docker ps
-          echo "**********************"
-          curl http://localhost:8081/
-          echo "**********************"
-          curl http://3.142.141.49:8081/
-
+    
